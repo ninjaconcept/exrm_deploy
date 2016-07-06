@@ -11,9 +11,11 @@ defmodule Mix.Tasks.ExrmDeploy.Deploy do
 
   defp deploy do
     info "Running build tasks"
-    Enum.map(["deps.get", "deps.compile", "compile", "phoenix.digest", "release"], fn (task) -> 
+    Enum.map(["deps.get", "deps.compile", "compile", "phoenix.digest"], fn (task) -> 
       Mix.Task.run task, []
     end)
+    
+    Mix.Task.run "release", ["--no-confirm-missing"]
 
     info "deploying #{app} ( #{config[:server]} )"
     Path.wildcard("rel/#{app}/releases/*.*.*/*.tar.gz")
